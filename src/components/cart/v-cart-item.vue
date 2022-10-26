@@ -2,7 +2,7 @@
   <div class="v-cart-item">
     <img
       class="v-cart-item__image"
-      :src="require('../assets/images/' + cart_item_data.image)"
+      :src="require('../../assets/images/' + cart_item_data.image)"
       alt="img"
     />
     <div class="v-cart-item__info">
@@ -10,7 +10,17 @@
       <p class="v-cart-item__price">{{ cart_item_data.price }} P</p>
       <p class="v-cart-item__article">{{ cart_item_data.article }}</p>
     </div>
-    <button class="v-cart-item__btn">Delete from cart</button>
+    <div class="v-cart-item__quantity">
+      <p>Qty:</p>
+      <span class="quantity__tools">
+        <span class="quantity__btn" @click="decrementItem">-</span>
+        {{ cart_item_data.quantity }}
+        <span class="quantity__btn" @click="incrementItem">+</span>
+      </span>
+    </div>
+    <button class="v-cart-item__btn" @click="deleteFromCart">
+      Delete from cart
+    </button>
   </div>
 </template>
 
@@ -23,6 +33,20 @@ export default {
       default() {
         return {};
       },
+    },
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    decrementItem() {
+      this.$emit("decrement");
+    },
+    incrementItem() {
+      this.$emit("increment");
+    },
+    deleteFromCart() {
+      this.$emit("deleteFromCart");
     },
   },
 };
@@ -40,5 +64,12 @@ export default {
   &__image {
     max-width: 50px;
   }
+}
+
+.quantity__btn {
+  cursor: pointer;
+}
+.quantity__tools {
+  user-select: none;
 }
 </style>
