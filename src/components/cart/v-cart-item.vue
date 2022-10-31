@@ -7,7 +7,7 @@
     />
     <div class="v-cart-item__info">
       <p class="v-cart-item__name">{{ cart_item_data.name }}</p>
-      <p class="v-cart-item__price">{{ cart_item_data.price }} P</p>
+      <p class="v-cart-item__price">{{ toFix }} P</p>
       <p class="v-cart-item__article">{{ cart_item_data.article }}</p>
     </div>
     <div class="v-cart-item__quantity">
@@ -37,6 +37,12 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    toFix() {
+      let value = parseFloat(this.cart_item_data.price);
+      return value.toFixed(2);
+    },
   },
   methods: {
     decrementItem() {

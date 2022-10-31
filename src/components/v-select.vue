@@ -42,7 +42,7 @@ export default {
   methods: {
     selectOption(option) {
       this.$emit("select", option);
-      this.hideSelect();
+      this.areOptionsVisible = false;
     },
     hideSelect() {
       this.areOptionsVisible = false;
@@ -62,6 +62,7 @@ export default {
   position: relative;
   width: 200px;
   cursor: pointer;
+  text-align: left;
 }
 
 .v-select p {
@@ -69,17 +70,21 @@ export default {
 }
 
 .title {
-  border: solid 1px gray;
-}
-.options {
-  border: solid 1px gray;
-  position: absolute;
-  top: 30px;
-  right: 0;
-  width: 100%;
+  border: solid 1px #aeaeae;
+  padding: 8px;
 }
 
-.v-select p:hover {
+.options {
+  border: solid 1px #aeaeae;
+  background: #ffffff;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  padding: 8px;
+}
+
+.options p:hover {
   background: #e7e7e7;
 }
 </style>

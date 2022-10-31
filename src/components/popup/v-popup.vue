@@ -91,5 +91,8 @@ export default {
     background: red;
     cursor: pointer;
   }
+  .material-icons {
+    cursor: pointer;
+  }
 }
 </style>

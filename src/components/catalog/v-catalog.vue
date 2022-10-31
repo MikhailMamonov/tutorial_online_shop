@@ -8,7 +8,6 @@
       <v-select
         :options="options"
         :selected="selected"
-        :isExpanded="IS_DESKTOP"
         @select="sortedByCategory"
       ></v-select>
       <div class="range-slider">

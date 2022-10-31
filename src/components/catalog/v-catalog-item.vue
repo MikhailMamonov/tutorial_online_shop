@@ -14,7 +14,7 @@
           alt="img"
         />
         <p class="v-catalog-item__name">{{ product_data.name }}</p>
-        <p class="v-catalog-item__price">{{ product_data.price }} Р</p>
+        <p class="v-catalog-item__price">{{ toFix }} Р</p>
         <p class="v-catalog-item__price">{{ product_data.category }}</p>
       </div>
     </v-popup>
@@ -24,7 +24,7 @@
       alt="img"
     />
     <p class="v-catalog-item__name">{{ product_data.name }}</p>
-    <p class="v-catalog-item__price">{{ product_data.price }} Р</p>
+    <p class="v-catalog-item__price">{{ toFix }} Р</p>
     <button class="v-catalog-item__show-info" @click="showPopupInfo">
       Show info
     </button>
@@ -52,9 +52,14 @@ export default {
       },
     },
   },
+  computed: {
+    toFix() {
+      let value = parseFloat(this.product_data.price);
+      return value.toFixed(2);
+    },
+  },
   methods: {
     onAddToCart() {
-      console.log("uhjuih");
       this.$emit("addToCart", this.product_data);
     },
     showPopupInfo() {
