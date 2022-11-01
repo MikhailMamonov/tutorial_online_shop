@@ -12,6 +12,7 @@ export const store = createStore({
     isDesktop: true,
     products: [],
     cart: [],
+    searchValue: "",
   },
   getters,
   mutations,

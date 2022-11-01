@@ -1,5 +1,6 @@
 <template>
   <div class="v-catalog">
+    <v-notification :messages="messages"></v-notification>
     <router-link :to="{ name: 'cart' }">
       <div class="v-catalog__link_to_cart">Cart: {{ CART.length }}</div>
     </router-link>
@@ -44,12 +45,13 @@
 <script>
 import vCatalogItem from "./v-catalog-item.vue";
 import vSelect from "./../v-select.vue";
+import vNotification from "./../notifications/v-notification.vue";
 
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "v-catalog",
-  components: { vCatalogItem, vSelect },
+  components: { vCatalogItem, vSelect, vNotification },
   data() {
     return {
       options: [
@@ -61,10 +63,11 @@ export default {
       sortedProducts: [],
       minPrice: 0,
       maxPrice: 1000,
+      messages: [],
     };
   },
   computed: {
-    ...mapGetters(["PRODUCTS", "CART", "IS_DESKTOP"]),
+    ...mapGetters(["PRODUCTS", "CART", "IS_DESKTOP", "SEARCH_VALUE"]),
     filteredProducts() {
       if (this.sortedProducts.length) {
         return this.sortedProducts;
@@ -75,7 +78,14 @@ export default {
   },
   methods: {
     addToCart(product) {
-      this.ADD_TO_CART(product);
+      this.ADD_TO_CART(product).then(() => {
+        let timeStamp = Date.now().toLocaleString();
+        this.messages.unshift({
+          name: "Товар добавлен в корзину",
+          icon: "check_circle",
+          id: timeStamp,
+        });
+      });
     },
     sortedByCategory(category) {
       let vm = this;
@@ -98,12 +108,28 @@ export default {
       }
       this.sortedByCategory();
     },
+    sortedProductsBySearchValue(searchValue) {
+      this.sortedProducts = [...this.PRODUCTS];
+      if (searchValue) {
+        this.sortedProducts = this.sortedProducts.filter(function (item) {
+          return item.name.toLowerCase().includes(searchValue.toLowerCase());
+        });
+      } else {
+        this.sortedProducts = this.PRODUCTS;
+      }
+    },
     ...mapActions(["GET_PRODUCTS_FROM_API", "ADD_TO_CART"]),
+  },
+  watch: {
+    SEARCH_VALUE() {
+      this.sortedProductsBySearchValue(this.SEARCH_VALUE);
+    },
   },
   mounted() {
     this.GET_PRODUCTS_FROM_API().then((response) => {
       if (response.data) {
         this.sortedByCategory();
+        this.sortedProductsBySearchValue(this.SEARCH_VALUE);
       }
     });
   },
@@ -120,7 +146,7 @@ export default {
   }
   &__link_to_cart {
     position: fixed;
-    top: 80px;
+    top: 100px;
     right: 10px;
     padding: $padding * 2;
     border: solid 1px #aeaeae;
